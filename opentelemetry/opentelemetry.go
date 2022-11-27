@@ -21,7 +21,7 @@ const (
 
 // StartSpanFromContext returns a new span with the given operation name and options. If a span
 // is found in the context, it will be used as the parent of the resulting span.
-func StartSpanFromContext(ctx context.Context, tp trace.TracerProvider, name string, opts ...trace.SpanStartOption) (context.Context, trace.Span) {
+func StartSpanFromContext(ctx context.Context, tp trace.TracerProvider, spanName string, opts ...trace.SpanStartOption) (context.Context, trace.Span) {
 	md, ok := tracing.FromContext(ctx)
 	if !ok {
 		md = make(tracing.TraceData)
@@ -45,7 +45,7 @@ func StartSpanFromContext(ctx context.Context, tp trace.TracerProvider, name str
 	} else {
 		tracer = otel.Tracer(instrumentationName)
 	}
-	ctx, span = tracer.Start(trace.ContextWithRemoteSpanContext(ctx, spanCtx), name, opts...)
+	ctx, span = tracer.Start(trace.ContextWithRemoteSpanContext(ctx, spanCtx), spanName, opts...)
 
 	carrier = make(propagation.MapCarrier)
 	propagator.Inject(ctx, carrier)
